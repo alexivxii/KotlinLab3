@@ -15,7 +15,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 import org.tensorflow.lite.task.audio.classifier.AudioClassifier
 
 class MainActivity : AppCompatActivity() {
-    
+
     // TODO 2.1: defines the model to be used
     var modelPath = "lite-model_yamnet_classification_tflite_1.tflite"
 
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         val record2 = AudioRecord(MediaRecorder.AudioSource.MIC,16000,AudioFormat.CHANNEL_IN_MONO,AudioFormat.ENCODING_PCM_16BIT,bufferSizeInBytes)
         record2.startRecording()
 
-        Timer().scheduleAtFixedRate(1, 2000) {
+        Timer().scheduleAtFixedRate(1, 500) {
 
             //TODO incercare accesare sampleuri : stocare cu functia read
             if(recorded==5)
