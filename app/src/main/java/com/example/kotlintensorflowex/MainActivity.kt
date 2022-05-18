@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         // TODO 3.2: showing the audio recorder specification
         val format = classifier.requiredTensorAudioFormat
+        //println("Classifier buffer size: " + classifier.requiredInputBufferSize) //15600 este output-ul (number of floats)
         val recorderSpecs = "Number Of Channels: ${format.channels}\n" + "Sample Rate: ${format.sampleRate}"
         recorderSpecsTextView.text = recorderSpecs
         //output: 1 channel, 16000 sample rate
@@ -60,24 +61,41 @@ class MainActivity : AppCompatActivity() {
 
         //TODO incercare accesare sampleuri : initializare var
         var recorded : Int = 0
-        var bufferSizeInBytes = AudioRecord.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
-        var sampleuri = ByteArray(bufferSizeInBytes)
+        var bufferSizeInBytes2 = AudioRecord.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
+        var sampleuri = ByteArray(bufferSizeInBytes2)
+        var length2 : Int = 0
+
+        var sampleuriClassifierRecording = FloatArray(15600)
         var length : Int = 0
 
-        println("Buffer size in bytes:" + bufferSizeInBytes)
-        val record2 = AudioRecord(MediaRecorder.AudioSource.MIC,16000,AudioFormat.CHANNEL_IN_MONO,AudioFormat.ENCODING_PCM_16BIT,bufferSizeInBytes)
-        record2.startRecording()
+
+//        println("Buffer size in bytes:" + bufferSizeInBytes2)
+//        val record2 = AudioRecord(MediaRecorder.AudioSource.MIC,16000,AudioFormat.CHANNEL_IN_MONO,AudioFormat.ENCODING_PCM_16BIT,bufferSizeInBytes2)
+//        record2.startRecording()
 
         Timer().scheduleAtFixedRate(1, 500) {
 
             //TODO incercare accesare sampleuri : stocare cu functia read
             if(recorded==5)
             {
-                record2.stop()
-                record2.release()
-                length = record2.read(sampleuri,0,bufferSizeInBytes)
-                println("Length Record Read")
+//                record2.stop()
+//                record2.release()
+//                length2 = record2.read(sampleuri,0,bufferSizeInBytes2)
+//                println("Length2 Record Read")
+//                println(length2)
+
+                length = record.read(sampleuriClassifierRecording,0,15600,AudioRecord.READ_NON_BLOCKING)
+                println("Length Classifier Record Read")
                 println(length)
+
+                var contor : Int = 0
+                while(contor < 200)
+                {
+                    println(sampleuriClassifierRecording[contor])
+                    contor++
+                }
+
+
                 recorded++
             }
             else
