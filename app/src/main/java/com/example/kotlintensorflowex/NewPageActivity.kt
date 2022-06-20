@@ -193,7 +193,7 @@ class NewPageActivity : AppCompatActivity() {
 
         var paint = Paint().apply {
             color = Color.parseColor("#545AA7")
-            strokeWidth = 5F
+            strokeWidth = 1F
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.BUTT
             strokeMiter = 2F
@@ -226,10 +226,10 @@ class NewPageActivity : AppCompatActivity() {
         var procent : Float = 0f
         contor = 0
         var contorFFT : Int = 0
-        var valoareGreen : Int = 0
+        var valoareCuloare : Int = 0
 
         println("Am intrat in parcurgerea ferestrelor---------")
-        while(contor<100) //TODO parcurgem toate cele 500 de ferestre a cate 64 esantioane
+        while(contor<250) //TODO parcurgem toate cele 500 de ferestre a cate 64 esantioane
         {
             val rezFFT = FFT.fft(vecInputFFT.slice(sliceLeft..sliceRight).toTypedArray())
 
@@ -253,11 +253,18 @@ class NewPageActivity : AppCompatActivity() {
 //                println(procent)
 //
 //                procent=100-procent
-                valoareGreen = (modulComplex*255*25).toInt()
+
 
 //                println(valoareGreen)
 
-                paintSP.color = Color.rgb(255,valoareGreen,0)
+                if(modulComplex<0.5) {
+                    valoareCuloare = ((1-modulComplex) * 255 * 50).toInt()
+                    paintSP.color = Color.rgb(255, valoareCuloare, 0)
+                }
+                else {
+                    valoareCuloare = (modulComplex * 255 * 50).toInt()
+                    paintSP.color = Color.rgb(0, 0, valoareCuloare)
+                }
 
                 canvasSP.drawPoint(contor.toFloat(), contorFFT.toFloat(),paintSP)
 
