@@ -101,13 +101,13 @@ class MainActivity : AppCompatActivity() {
                 println("Length Classifier Record Read")
                 println(length)
 
-//                var contor : Int = 0
-//                while(contor < 200)
-//                {
-//                    println(sampleuriClassifierRecording[contor])
-//                    contor++
-//                }
-//                println("Gata sampleurile")
+                var contor : Int = 0
+                while(contor < 50)
+                {
+                    println(sampleuriFloats[contor])
+                    contor++
+                }
+                println("Gata sampleurile")
 
 
                 record2AudioRecordFloats.stop()

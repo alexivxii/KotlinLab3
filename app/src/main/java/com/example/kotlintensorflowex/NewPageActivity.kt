@@ -82,7 +82,7 @@ class NewPageActivity : AppCompatActivity() {
 
         println("Am primit valorile")
         var contor1 : Int = 0
-        while(contor1 < 50)
+        while(contor1 < 10)
         {
             println(sampleuriFloats2[contor1])
             contor1++
@@ -143,22 +143,18 @@ class NewPageActivity : AppCompatActivity() {
         //println(vecInputFFT.size)
 
 
-        //limitele stanga si dreapta pentru ferestre
-        var sliceLeft : Int = 0
-        var sliceRight : Int = 63
 
 
-
-        val rezFFT = FFT.fft(vecInputFFT.slice(0..63).toTypedArray())
-
-        //println(rezFFT.size)
-
-        println("Output FFT")
-        var j=0
-        while(j<10){
-            println(rezFFT[j])
-            j++
-        }
+//        val rezFFT = FFT.fft(vecInputFFT.slice(0..63).toTypedArray())
+//
+//        //println(rezFFT.size)
+//
+//        println("Output FFT")
+//        var j=0
+//        while(j<10){
+//            println(rezFFT[j])
+//            j++
+//        }
 
 
         //TODO Canvas Spectrogram ----------------------------------------------------------------
@@ -166,7 +162,7 @@ class NewPageActivity : AppCompatActivity() {
         //variabilele pentru canvas si bitmap
         val imageSP = findViewById<View>(R.id.imageSpectrogram)
 
-        val bitmapSP: Bitmap = Bitmap.createBitmap(1000, 64, Bitmap.Config.ARGB_8888)
+        val bitmapSP: Bitmap = Bitmap.createBitmap(500, 64, Bitmap.Config.ARGB_8888)
         val canvasSP: Canvas = Canvas(bitmapSP)
 
         val drawingListSP = mutableListOf<Float>()
@@ -208,18 +204,74 @@ class NewPageActivity : AppCompatActivity() {
         //Atributele de culoare/grosime ale punctelor ce vor fi reprezentate
         val paintSP = Paint().apply {
             color = Color.parseColor("#03fc35")
-            strokeWidth = 2F
+            strokeWidth = 1F
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.BUTT
             strokeMiter = 2F
         }
 
-        paintSP.color = Color.rgb(255,255,0)
-        canvasSP.drawPoint(120F, 32F,paintSP)
+//        paintSP.color = Color.rgb(255,255,0)
+//        canvasSP.drawPoint(120F, 32F,paintSP)
+//
+//        paintSP.color = Color.rgb(255,0,0)
+//        canvasSP.drawPoint(121F, 32F,paintSP)
 
-        paintSP.color = Color.rgb(255,0,0)
-        canvasSP.drawPoint(130F, 32F,paintSP)
 
+        //TODO de la FFT la Spectrograma
+        //limitele stanga si dreapta pentru ferestre
+        var sliceLeft : Int = 0
+        var sliceRight : Int = 63
+        var modulComplex : Float = 0F
+        var nrReal : Float = 0F
+        var procent : Float = 0f
+        contor = 0
+        var contorFFT : Int = 0
+        var valoareGreen : Int = 0
+
+        println("Am intrat in parcurgerea ferestrelor---------")
+        while(contor<100) //TODO parcurgem toate cele 500 de ferestre a cate 64 esantioane
+        {
+            val rezFFT = FFT.fft(vecInputFFT.slice(sliceLeft..sliceRight).toTypedArray())
+
+            //modulul numarului complex
+            //modul = sqrt(real^2+im^2)
+            //deoarece nu avem deloc parte imaginara, modulul maxim va fi sqrt(real^2)
+            //rgb -> 255 -> 0, 0 -> 255
+
+
+            contorFFT=0
+            while(contorFFT<rezFFT.size)
+            {
+                nrReal = rezFFT[contorFFT].re.toFloat()
+                modulComplex = kotlin.math.sqrt((nrReal * nrReal)) // in interval [0,1]
+
+                //println(modulComplex)
+
+                //normalizare culoare
+//                procent = modulComplex*100 //cat la suta din 1 reprezinta modulul numarului complex
+//
+//                println(procent)
+//
+//                procent=100-procent
+                valoareGreen = (modulComplex*255*25).toInt()
+
+//                println(valoareGreen)
+
+                paintSP.color = Color.rgb(255,valoareGreen,0)
+
+                canvasSP.drawPoint(contor.toFloat(), contorFFT.toFloat(),paintSP)
+
+                contorFFT++
+            }
+
+
+            //trecem la urmatoarea fereastra
+            sliceLeft += 64
+            sliceRight +=64
+            contor++
+        }
+
+        //TODO Actualizam canvas
         imageSP.background = BitmapDrawable(getResources(), bitmapSP)
     }
 }
