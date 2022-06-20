@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.widget.TextView
 import android.util.Log
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.widget.Button
 import androidx.core.app.ActivityCompat
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
         {
@@ -140,6 +143,20 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 textView.text = outputStr
             }
+        }
+
+
+
+        //Next page button
+        val buttonNewPage = findViewById<Button>(R.id.newPageButton)
+        buttonNewPage.setOnClickListener {
+
+            val newPageBundle = Bundle()
+            newPageBundle.putFloatArray("key", sampleuriFloats)
+            val intent = Intent(this, NewPageActivity::class.java)
+            intent.putExtras(newPageBundle)
+
+            startActivity(intent)
         }
 
 
