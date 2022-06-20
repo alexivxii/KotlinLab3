@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import java.lang.Math.*
+import kotlin.reflect.typeOf
 
 class Complex(val re: Double, val im: Double) {
     operator infix fun plus(x: Complex) = Complex(re + x.re, im + x.im)
@@ -80,11 +81,11 @@ class NewPageActivity : AppCompatActivity() {
         sampleuriFloats2 = intent.getSerializableExtra("key") as FloatArray
 
         println("Am primit valorile")
-        var contor : Int = 0
-        while(contor < 200)
+        var contor1 : Int = 0
+        while(contor1 < 50)
         {
-            println(sampleuriFloats2[contor])
-            contor++
+            println(sampleuriFloats2[contor1])
+            contor1++
         }
         println("Gata sampleurile")
 
@@ -93,8 +94,10 @@ class NewPageActivity : AppCompatActivity() {
         ////////////////////////////////////////////////////////////////////////////////////////
 
         //Exemplu de fft
-//        val dataInputFFT = arrayOf(Complex(1.0, 0.0), Complex(1.0, 0.0), Complex(1.0, 0.0), Complex(1.0, 0.0),
-//            Complex(0.0, 0.0), Complex(0.0, 2.0), Complex(0.0, 0.0), Complex(0.0, 0.0))
+        val dataInputFFT = arrayOf(Complex(1.0, 0.0), Complex(1.0, 0.0), Complex(1.0, 0.0), Complex(1.0, 0.0),
+            Complex(0.0, 0.0), Complex(0.0, 2.0), Complex(0.0, 0.0), Complex(0.0, 0.0))
+
+       // println(dataInputFFT::class.java.typeName)
 //
 //        val rezFFT = FFT.fft(dataInputFFT)
 //
@@ -104,6 +107,59 @@ class NewPageActivity : AppCompatActivity() {
 //            println(rezFFT[j])
 //            j++
 //        }
+
+
+        //TODO: esantioane -> FFT
+
+        var vecInputFFT : Array<Complex> = arrayOf()
+//
+//        vecInputFFT += Complex (1.0,0.0)
+//        vecInputFFT += Complex (1.0,0.0)
+//        vecInputFFT += Complex (1.0,0.0)
+//        vecInputFFT += Complex (1.0,0.0)
+//        vecInputFFT += Complex (0.0,0.0)
+//        vecInputFFT += Complex (0.0,2.0)
+//        vecInputFFT += Complex (0.0,0.0)
+//        vecInputFFT += Complex (0.0,0.0)
+
+       // println(vecInputFFT::class.java.typeName)
+
+       // println(vecInputFFT)
+
+//        val rezFFT = FFT.fft(vecInputFFT)
+
+
+        var contor : Int = 0
+        while(contor < sampleuriFloats2.size) // adaugare din esantioane in lista de tip Complex
+        {
+//            println(sampleuriFloats2[contor])
+
+            vecInputFFT += Complex(sampleuriFloats2[contor].toDouble(), 0.0)
+
+            contor++
+        }
+        println("S-a terminat adaugarea esantioanelor in lista de tip <Complex>")
+
+        //println(vecInputFFT.size)
+
+
+        //limitele stanga si dreapta pentru ferestre
+        var sliceLeft : Int = 0
+        var sliceRight : Int = 63
+
+
+
+        val rezFFT = FFT.fft(vecInputFFT.slice(0..63).toTypedArray())
+
+        //println(rezFFT.size)
+
+        println("Output FFT")
+        var j=0
+        while(j<10){
+            println(rezFFT[j])
+            j++
+        }
+
 
         //TODO Canvas Spectrogram ----------------------------------------------------------------
 
@@ -115,7 +171,7 @@ class NewPageActivity : AppCompatActivity() {
 
         val drawingListSP = mutableListOf<Float>()
 
-        //Desenam dreptunghiul care delimiteaza canvasul
+        //TODO Desenam dreptunghiul care delimiteaza canvasul
 
         // first line starting point x y
         drawingListSP.add(0F) // x

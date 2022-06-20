@@ -109,8 +109,7 @@ class MainActivity : AppCompatActivity() {
 //                }
 //                println("Gata sampleurile")
 
-//                record2AudioRecordBytes.stop()
-//                record2AudioRecordBytes.release()
+
                 record2AudioRecordFloats.stop()
                 record2AudioRecordFloats.release()
 
