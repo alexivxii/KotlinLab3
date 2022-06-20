@@ -62,45 +62,39 @@ class MainActivity : AppCompatActivity() {
         //TODO incercare accesare sampleuri : initializare var
         var recorded : Int = 0
 
-        //var bufferSizeInBytes2 = AudioRecord.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
-        var bufferSizeInFloats2 = AudioRecord.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_FLOAT)
 
-        var sampleuriFloats = FloatArray(15600)
-       // var sampleuriByte = ByteArray(bufferSizeInBytes2)
+        var bufferSizeInFloats2 = AudioRecord.getMinBufferSize(32000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_FLOAT)
+
+        var sampleuriFloats = FloatArray(32000)
+
         var lengthAudioRecFloat : Int = 0
-//        var lengthAudioRecBytes : Int = 0
 
-        println("Buffer size in Floats:")
-        println(bufferSizeInFloats2) //2560
-        //println("Buffer size in Bytes:" + bufferSizeInBytes2) //1280
-//        val record2AudioRecordBytes = AudioRecord(MediaRecorder.AudioSource.MIC,16000,AudioFormat.CHANNEL_IN_MONO,AudioFormat.ENCODING_PCM_16BIT,bufferSizeInBytes2)
-//        record2AudioRecordBytes.startRecording()
 
-        val record2AudioRecordFloats = AudioRecord(MediaRecorder.AudioSource.MIC,16000,AudioFormat.CHANNEL_IN_MONO,AudioFormat.ENCODING_PCM_FLOAT,bufferSizeInFloats2)
+//        println("Buffer size in Floats:")
+//        println(bufferSizeInFloats2) //2560
+
+        val record2AudioRecordFloats = AudioRecord(MediaRecorder.AudioSource.MIC,32000,AudioFormat.CHANNEL_IN_MONO,AudioFormat.ENCODING_PCM_FLOAT,128000) //81920 pt 20480, 128000 pentru 32000 samples
         record2AudioRecordFloats.startRecording()
 
         //TODO Tensorflow classifier
-        var sampleuriClassifierRecording = FloatArray(15600)
+        var sampleuriClassifierRecording = FloatArray(16000)
         var length : Int = 0
 
 
-        Timer().scheduleAtFixedRate(1, 500) {
-            //TODO Important: la 1000ms 15600 floats, la 500ms cam 8000 floats, la 900ms cam 14400 floats, la 250ms cam 4160 floats
-
+        Timer().scheduleAtFixedRate(1, 1000) {
 
             //TODO incercare accesare sampleuri : stocare cu functia read
             if(recorded==5)
             {
 
 
-                lengthAudioRecFloat = record2AudioRecordFloats.read(sampleuriFloats,0,15600,AudioRecord.READ_NON_BLOCKING)
-//                lengthAudioRecBytes = record2AudioRecordBytes.read(sampleuriByte,0,bufferSizeInBytes2)
+                lengthAudioRecFloat = record2AudioRecordFloats.read(sampleuriFloats,0,32000,AudioRecord.READ_NON_BLOCKING)
+
                 println("Length2 Floats Record Read")
                 println(lengthAudioRecFloat)
-//                println("Length3 Bytes Record Read")
-//                println(lengthAudioRecBytes)
 
-                length = record.read(sampleuriClassifierRecording,0,15600,AudioRecord.READ_NON_BLOCKING)
+
+                length = record.read(sampleuriClassifierRecording,0,16000,AudioRecord.READ_NON_BLOCKING)
                 println("Length Classifier Record Read")
                 println(length)
 
